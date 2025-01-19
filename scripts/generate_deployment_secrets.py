@@ -1,10 +1,12 @@
 import os
 import sys
 import uuid
-import subprocess
 
 def get_user_input(prompt):
-    return input(prompt)
+    try:
+        return input(prompt)
+    except EOFError:
+        return ""
 
 def run_command(command):
     try:
@@ -35,6 +37,7 @@ def main():
         if secret.endswith("TOKEN"):
             generated_secrets[secret] = str(uuid.uuid4()).replace('-', '')
         
+        print(f"  Generated value: {generated_secrets.get(secret, 'N/A')}")
         user_input = get_user_input(f"  Enter {secret} (or press Enter to use generated value): ").strip()
         
         if user_input:

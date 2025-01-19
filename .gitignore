@@ -24,7 +24,6 @@ MANIFEST
 # Virtual Environment
 venv/
 env/
-.env
 .venv
 ENV/
 
@@ -50,6 +49,13 @@ Thumbs.db
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Environment Variables
+.env
+*.env
+.env.local
+.env.development
+.env.production
 
 # Project Specific
 wallet_seeds/

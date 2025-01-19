@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+      - NEXT_PUBLIC_MARKET_DATA_URL=http://market-data:5001
+    depends_on:
+      - backend
+      - market-data
+    networks:
+      - eon_xrp_network
+
+  backend:
+    build:
+      context: ./core
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://eonxrp:password@database:5432/eonxrp
+      - XRPL_NETWORK=testnet
+      - CREATOR_WALLET=rEumCqY1g3ifhBgZ5JxCLcDNAau9XzmFdz
+    depends_on:
+      - database
+      - redis
+    networks:
+      - eon_xrp_network
+
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - ADMIN_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - eon_xrp_network
+
+  market-data:
+    build:
+      context: ./core/src/integrations
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - CACHE_DURATION=5m
+      - SUPPORTED_TOKENS=BTC,ETH,XRP,USDC
+    networks:
+      - eon_xrp_network
+
+  database:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=eonxrp
+      - POSTGRES_USER=eonxrp
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    networks:
+      - eon_xrp_network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - eon_xrp_network
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - eon_xrp_network
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - eon_xrp_network
+
+volumes:
+  postgres_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  eon_xrp_network:
+    driver: bridge

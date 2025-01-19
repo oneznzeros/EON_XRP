@@ -1,0 +1,9 @@
+xrpl-py==2.3.1
+web3==6.11.0
+pillow==10.2.0
+python-dotenv==1.0.0
+fastapi==0.109.0
+uvicorn==0.27.0
+sqlalchemy==2.0.25
+ipfs-http-client==0.7.0
+cryptography==42.0.2

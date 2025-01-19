@@ -1,0 +1,22 @@
+[build]
+builder = "nixpacks"
+buildCommand = "npm run build"
+
+[deploy]
+startCommand = "npm run start"
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+
+[env]
+  NODE_ENV = "production"
+  XRPL_NETWORK = "testnet"
+  DATABASE_URL = "${POSTGRES_URL}"
+  CREATOR_WALLET = "rEumCqY1g3ifhBgZ5JxCLcDNAau9XzmFdz"
+
+[services]
+  web:
+    cpu = 0.5
+    memory = 0.5
+  database:
+    cpu = 0.25
+    memory = 0.5

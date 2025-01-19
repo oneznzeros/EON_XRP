@@ -1,0 +1,111 @@
+version: '1.0.0-beta'
+
+# Platform Configuration
+platform:
+  name: EonXRP
+  environment: beta
+  version: 1.0.0
+  stage: volume_testing
+
+# Network Configuration
+network:
+  blockchain: XRPL
+  network_type: testnet
+  rpc_endpoints:
+    - wss://s.altnet.rippletest.net:51233
+    - wss://testnet.xrpl.org
+
+# Feature Flags
+features:
+  token_factory: true
+  creator_launchpad: true
+  brand_marketplace: true
+  admin_dashboard: true
+  analytics_tracking: true
+
+# Security Configuration
+security:
+  authentication_method: firebase
+  mfa_required: true
+  rate_limiting:
+    max_requests_per_minute: 100
+  allowed_ips:
+    - 127.0.0.1
+    - 0.0.0.0/0  # Open for beta testing
+
+# Performance Limits
+performance_limits:
+  max_concurrent_tokens: 50
+  max_token_creation_rate: 10/hour
+  max_transaction_volume: 1000/day
+
+# Monitoring & Logging
+monitoring:
+  error_tracking: sentry
+  log_level: debug
+  metrics_collection: prometheus
+
+# Beta Testing Parameters
+beta_testing:
+  invite_only: false
+  max_beta_users: 500
+  feedback_mechanism: 
+    - in_app_surveys
+    - discord_channel
+    - email_support
+
+# Fee Structure
+fees:
+  token_creation: 0.1 XRP
+  marketplace_listing: free
+  transaction_fee: 0.00001 XRP
+
+# Wallet Configuration
+wallet:
+  primary_wallet: rEumCqY1g3ifhBgZ5JxCLcDNAau9XzmFdz
+  fee_distribution:
+    creator_share: 50%
+    platform_share: 30%
+    community_reserve: 20%
+
+# Integrations
+integrations:
+  wallet_connect: true
+  xumm_wallet: true
+  hardware_wallet_support: 
+    - ledger
+    - trezor
+  gemini:
+    enabled: true
+    mode: sandbox
+    features:
+      price_tracking: true
+      volume_analysis: true
+      order_execution: false
+    supported_tokens:
+      - BTC
+      - ETH
+      - XRP
+      - USDC
+    data_sync_frequency: hourly
+  market_data:
+    enabled: true
+    sources:
+      - coingecko
+      - coincap
+    features:
+      price_tracking: true
+      historical_data: true
+      volume_analysis: true
+    cache_duration: 5 # minutes
+    supported_tokens:
+      - BTC
+      - ETH
+      - XRP
+      - USDC
+    data_sync_frequency: 5m
+
+# Compliance
+compliance:
+  kyc_required: false
+  aml_checks: minimal

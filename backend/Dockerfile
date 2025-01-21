@@ -1,38 +1,20 @@
-# Use official Python image
-FROM python:3.9-slim-buster AS base
+# Use an official Python runtime as a parent image
+FROM python:3.11-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# Set work directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Install Python dependencies
-COPY requirements.txt .
+# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
-COPY . .
-
-# Create a non-root user
-RUN addgroup --system --gid 1001 eonxrp
-RUN adduser --system --uid 1001 eonxrp
-
-# Set permissions
-RUN chown -R eonxrp:eonxrp /app
-
-# Switch to non-root user
-USER eonxrp
-
-# Expose port for the application
+# Make port 8000 available to the world outside this container
 EXPOSE 8000
 
-# Use uvicorn to run the application
-CMD ["uvicorn", "src.eon_xrp.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Define environment variable
+ENV PYTHONUNBUFFERED=1
+
+# Run the application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

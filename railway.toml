@@ -1,22 +1,33 @@
 [build]
-builder = "nixpacks"
-buildCommand = "npm run build"
+builder = "python"
+buildCommand = "pip install -r requirements.txt"
 
 [deploy]
-startCommand = "npm run start"
+startCommand = "uvicorn backend.main:app --host 0.0.0.0 --port $PORT"
 healthcheckPath = "/health"
 healthcheckTimeout = 100
 
 [env]
-  NODE_ENV = "production"
+  PYTHON_VERSION = "3.11"
   XRPL_NETWORK = "testnet"
+  XRPL_RPC_URL = "https://s.altnet.rippletest.net:51234/"
   DATABASE_URL = "${POSTGRES_URL}"
   CREATOR_WALLET = "rEumCqY1g3ifhBgZ5JxCLcDNAau9XzmFdz"
+  MARKET_DATA_CACHE_DURATION = "5m"
+  SUPPORTED_TOKENS = "BTC,ETH,XRP,USDC"
 
 [services]
   web:
     cpu = 0.5
     memory = 0.5
-  database:
-    cpu = 0.25
+  backend:
+    cpu = 0.5
     memory = 0.5
+  market-data:
+    cpu = 0.25
+    memory = 0.25
+
+[github]
+  enabled = true
+  autoDeploy = true
+  repo = "oneznzeros/EON_XRP"

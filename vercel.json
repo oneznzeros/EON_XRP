@@ -14,7 +14,14 @@
     }
   ],
   "env": {
-    "NEXT_PUBLIC_API_URL": "@eon_xrp_api_url",
-    "NEXT_PUBLIC_XRPL_NETWORK": "testnet"
-  }
+    "NEXT_PUBLIC_BACKEND_URL": "@eonxrp_backend_url",
+    "XRPL_NETWORK": "testnet"
+  },
+  "github": {
+    "enabled": true,
+    "autoDeploy": true
+  },
+  "regions": ["all"],
+  "public": true,
+  "framework": "nextjs"
 }
